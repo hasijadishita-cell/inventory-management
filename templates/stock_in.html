@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock In</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stock_in.css') }}">
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+
+    <h1>Stock In</h1>
+    <hr>
+    <div class="container">
+        <form method="POST">
+            <div class="form-group">
+            <label>Select Item</label>
+            <select name="item_id" required>
+                {% for item in items %}
+                <option value="{{ item[0] }}">{{ item[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Quantity</label>
+            <input type="number" name="qty" min="1" required>
+        </div>
+        <div class="form-group">
+            <label>Received From</label>
+            <input type="text" name="party"  required>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn">Add Stock</button>
+        </div>
+        </form>
+        <div class="table">
+            <a href="{{ url_for('stock_in_details') }}">Stock IN Table</a>
+        </div>
+    </div>
+    {% with messages=get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        
+        {% endwith %}
+    {% endblock %}
+
+
+</body>
+</html>

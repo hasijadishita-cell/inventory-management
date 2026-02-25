@@ -1,0 +1,23 @@
+#Python
+*.pyc
+*.Pyo
+*.pyd
+
+#Virtual env
+venv/
+.env/
+
+#Flask
+instance/
+*.log
+
+#DB
+*.db
+*.sqlite
+*.sqlite3
+
+#macOS
+.DS_Store
+
+#VS Code
+.vscode/

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+    <h1>Dashboard</h1>
+    <hr>
+    <div class="dashboard">
+        <a href="{{ url_for('add_item_details') }}" style="text-decoration: none; color: inherit;">
+        <div class="box">
+            <h3>Total Items</h3>
+            <p>{{ total_items }}</p>
+        </div>
+        </a>
+        <a href="{{ url_for('stock_in_details') }}" style="text-decoration: none; color: inherit;">
+        <div class="box">
+            <h3>Total Stock Ins</h3>
+            <p>{{ total_in }}</p>
+        </div>
+        </a>
+
+        <a href="{{ url_for('stock_out_details') }}" style="text-decoration: none; color: inherit;">
+        <div class="box">
+            <h3>Total Stock Out</h3>
+            <p>{{ total_out }}</p>
+        </div>
+        </a>
+        <a href="{{ url_for('low_stock') }}" style="text-decoration: none; color: inherit;">
+        <div class="box">
+            <h3>Low Stock Items</h3>
+            <p>{{ low_stock_count }}</p>
+        </div>
+    </a>
+    </div>
+    {% endblock %}
+</body>
+</html>

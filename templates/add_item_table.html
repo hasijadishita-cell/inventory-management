@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>add_item_table</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='add_item.css') }}">
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+
+    <h1>Items added</h1>
+    <table >
+        <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>Item Name</th>
+                <th>MRP</th>
+                <th>Purchase Rate</th>
+                <th>Low Stock Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+                <td>
+                    {% if session["user"]["role"] in ["manager","admin"] %}
+                    <div class="action-buttons">
+                    <a href="{{ url_for('edit_item', item_id=row[0]) }}" class="edit-btn">Edit</a>
+                    <form method="POST"
+                    action="{{ url_for('delete_item_route', item_id=row[0]) }}"
+                    >
+                <button type="submit" class="delete-btn">Delete</button>
+            </form>
+            </div>
+            {% else %}
+            {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="table">
+    <a href="{{ url_for('add_item_route') }}"><- Back</a>
+</div>
+    {% endblock %}
+</body>
+</html>

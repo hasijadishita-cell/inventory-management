@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock_in_table</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='stock_OUT.css') }}">
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block content %}
+
+    <h2>Stock Out History</h2>
+    <hr>
+    <table >
+        <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>Item Name</th>
+                <th>Quantity</th>
+                <th>Issued To</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in data %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="table">
+    <a href="{{ url_for('stock_out') }}"><- Back</a>
+</div>
+    {% endblock %}
+</body>
+</html>
