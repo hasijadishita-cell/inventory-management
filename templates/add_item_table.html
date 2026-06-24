@@ -30,7 +30,6 @@
                 <td>{{ row[3] }}</td>
                 <td>{{ row[4] }}</td>
                 <td>
-                    {% if session["user"]["role"] in ["manager","admin"] %}
                     <div class="action-buttons">
                     <a href="{{ url_for('edit_item', item_id=row[0]) }}" class="edit-btn">Edit</a>
                     <form method="POST"
@@ -39,8 +38,6 @@
                 <button type="submit" class="delete-btn">Delete</button>
             </form>
             </div>
-            {% else %}
-            {% endif %}
                 </td>
             </tr>
             {% endfor %}

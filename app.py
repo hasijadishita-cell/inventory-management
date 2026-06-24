@@ -8,38 +8,12 @@ SEED_ON_START=True
 app=Flask(__name__)
 app.secret_key="dev-secret-change-this"
 
-def login_reqired(func):
-    @wraps(func)
-    def wrapper(*args,**kwargs):
-        if "user" not in session:
-            return redirect(url_for("login"))
-        
-        return func(*args,**kwargs)
-    return wrapper
-
-role_level={"staff":1, "manager":2,"admin":3}
-
-def role_required(role):
-    def decorator(func):
-        @wraps(func)
-        def wrapper(*args,**kwargs):
-            if "user" not in session:
-                return redirect(url_for("login"))
-            user_role=session["user"].get("role","staff")
-            if role_level.get(user_role,0)<role_level[role]:
-                flash("Not allowed!")
-                return redirect (url_for("home"))
-            return func(*args,**kwargs)
-        return wrapper
-    return decorator
-
 
 @app.route("/")
 def page():
-    return redirect(url_for("login"))
+    return redirect(url_for("home"))
 
 @app.route("/home")
-@login_reqired
 def home():
     total_items=count_items()
     total_in=total_stock_in()
@@ -49,7 +23,6 @@ def home():
     return render_template("home.html", total_items=total_items,total_in=total_in,total_out=total_out,low_stock_count=low_stock_count)
 
 @app.route("/add-item", methods=["GET", "POST"])
-@role_required("manager")
 def add_item_route():
     if request.method=="POST":
         name=request.form.get("name")
@@ -73,7 +46,6 @@ def add_item_route():
     return render_template("add_item.html")
 
 @app.route("/stock_in", methods=["GET","POST"])
-@role_required("staff")
 def stock_in():
     if request.method=="POST":
         item_id=int(request.form.get("item_id"))
@@ -112,7 +84,6 @@ def add_item_details():
     return render_template("add_item_table.html",data=data)
 
 @app.route("/stock_out", methods=["GET", "POST"])
-@role_required("staff")
 def stock_out():
     if request.method=="POST":
         item_id=int(request.form.get("item_id"))
@@ -179,34 +150,6 @@ def seed_data():
     add_transaction(1,6,"OUT","Mr. Sharma")
     add_transaction(2,2,"OUT","Rajmandir")
 
-@app.route("/login",methods=["GET","POST"])
-def login():
-    if request.method=="POST":
-        username=request.form["username"].strip()
-        password=request.form["password"]
-        
-
-        user=get_user(username)
-      
-       
-        if not user:
-            flash("Invalid username or password")
-            return redirect(url_for("login"))
-        
-        user_id,username,password_hash,role = get_user(username)
-        
-        if not check_password_hash(password_hash,password):
-            flash("Invalid username or password")
-            return redirect(url_for("login"))
-        
-        session["user"]={
-            "id":user_id,
-            "username":username,
-            "role":role
-        }
-        flash("Login Successfully!")
-        return redirect(url_for("home"))
-    return render_template("login.html")
 
 @app.route("/debug")
 def debug_user():
@@ -218,7 +161,6 @@ def debug_user():
     return str(rows)
 
 @app.route("/edit-item/<int:item_id>",methods=["GET","POST"])
-@role_required("manager")
 def edit_item(item_id):
     item=get_item_byid(item_id)
     if not item:
@@ -236,7 +178,6 @@ def edit_item(item_id):
     return render_template("edit_item.html",item=item)
 
 @app.route("/delete-item/<int:item_id>",methods=["POST"])
-@role_required("manager")
 def delete_item_route(item_id):
     delete_item(item_id)
     flash("Item deleted successfully")
